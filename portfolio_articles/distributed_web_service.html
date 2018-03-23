@@ -6,11 +6,11 @@
 -->
 <html>
 	<head>
-		<title>Austin Ramos</title>
+		<title>Distr_web_service</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/portfolio/Distributed_Service.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 	</head>
 	<body>
@@ -18,24 +18,23 @@
 		<!-- Header -->
 			<section id="header">
 				<header>
-					<span class="image avatar"><img src="images/avatar.jpg" alt="" /></span>
+					<span class="image avatar"><img src="../images/avatar.jpg" alt="" /></span>
 					<h1 id="logo"><a href="#">Austin Ramos</a></h1>
 					<p></br>Turning coffee into code<br />
 					since 2012</p>
 				</header>
 				<nav id="nav">
 					<ul>
-						<li><a href="#one" class="active">About</a></li>
-						<li><a href="#two">Interests</a></li>
-						<li><a href="#three">Portfolio</a></li>
+						<li><a href="../index.html" class="active">Back</a></li>
+						<li><a href="#two">Whats it all about?</a></li>
+						<li><a href="#three">Generating Executables</a></li>
 							<li><a href="#five">Blog</a></li>
-						<li><a href="#four">Contact</a></li>
+				
 					
 					</ul>
 				</nav>
 				<footer>
 					<ul class="icons">
-						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
 						<li><a href="https://github.com/AustinRamos" class="icon fa-github"><span class="label">Github</span></a></li>
 						<li><a href="mailto:austinramos@wustl.edu" class="icon fa-envelope"><span class="label">Email</span></a></li>
 					</ul>
@@ -49,31 +48,27 @@
 					<div id="main">
 
 						<!-- One -->
-							<section id="one">
+							<section id="one" background-image="../images/pic02.jpg">
 								<div class="container">
 									<header class="major">
-										<h2>About</h2>
-										<p>Who Am I?	</p>
+										<h2>Distributed Web Service in C</h2>
+										
 									</header>
 									
-									<p>Well, I’m Austin. I like computers and I study them too. Concentrating on Distributed systems.
-									 Finance and Economics are cool too. Blockchain 
-									 technology is really cool. </br>
-									  Washington University in St. Louis, 2019. B.S in Computer Science, B.A in Economics. Soon to be software engineer! </p>
-								
-								<h3> What is this?</h3>
-							<p>	A way to show off some of the cool things i've worked on, but <b> more importantly</b>, a way to hold myself accountable for learning new things! I like teaching 
-							myself new stuff, but I tend to bounce around 4-5 topics that fascinate me at any given time, without learning about any one in particular in depth. This is just no 
-							  way to learn much about anything. Maybe this is something most people already know, but I have the attention span
-							  of a spoon so this is a big step for me. Hopefully posting projects on here will help me stay focused.
-							  </br> </br>
-							  I’ll break down some projects I’ve done in the past, write about the technical interview process for software engineering these days, write
-							   about topics that are loosely related to my interests below, or pretty much whatever else I want to!
-</br>
-<b>Disclaimer:</b> 1) As this is mostly for me, you may be subject to my sense of humor, which is not very good. 
-
-							  
-							  <p><a href="https://www.linkedin.com/in/austin-ramos-243181111/"><b>Connect with me on linkedIn</b> </a>, and <a href="https://github.com/AustinRamos"><b>Check out my Github</b></a>! </p>
+									<p> So thishere's a quick summary of what I learned</br></p>
+									<ul >
+										<li >how important memory management is in C(2.5 hours debugging for one Segmentation fault)</li>
+										<li>Dealing with concurrency and race conditions(pthreads, concurrency on both client and server)</li>
+										<li >Makefiles and the billions of hours of time they can save</li>
+										<li >Interprocess Communication (Posix message queues)</li>
+										<li>Static libraries</li>
+									</ul>
+									
+									
+									<p>
+									Check out the full project <a href="https://github.com/AustinRamos/Distributed_Service_C"><b>on my Github!</b></a>
+									
+									
 							  </p>
 								</div>
 							</section>
@@ -81,81 +76,105 @@
 						<!-- Two -->
 							<section id="two">
 								<div class="container">
-									<h3>Academic and Career Interests</h3>
-									<h4>     (Stuff I like)</h4>
-								
-									<ul class="feature-icons">
-										<li class="fa-code">Distributed Systems</li>
-										<li class="fa-cubes">Smart contract development and token protocol design </li>
-										<li class="fa-book">Database design and management</li>
-										<li class="fa-coffee">Consuming an excessive amount of caffeine</li>
-										<li class="fa-bolt">Algorithmic trading and Automated Trading Systems</li>
-										<li class="fa-users">Artificial intelligence</li>
-										<li class="fa-book">Market design and behaviour</li>
-									</ul>
-										
+									<h3>What's it all about?</h3>
+									
+								<p>
+									Ever heard of an RPC(link) ?Well this is that, but worse. Using Sun RPC would have probably made this project just slightly more than trivial,
+									but if I had jumped straight into RPC's i probably would not understand very much about what goes on in even the simplest concurrent server/client communication. they basically generate code to allow you to (seemingly) execute a procedure from one process on another process <b>with a different memory space </b>.
+									Like, for example, calling a simply function like add_tuple() on the client side, and it will
+									automatically add it to the server side, hiding the complexity of establishing connections
+									Its a clever trick and vastly reduces the complexity of how the client and server interact. Its pretty much the concept i 
+									used to develop the static library i described above.
+									</br>
+									I mean, look how simple a client program seems:
+									<code>
+									</br>
+									int main(void) {
+									</br>
+int y = num_items(qname);
+</br>
+	printf("Number of items: %d \n", y);
+	</br>
+	
+	float fl = 2.3;
+	</br>
+	set_value( 1,"test1",fl ,qname);
+	</br>
+		set_value( 2,"test2",fl ,qname);
+		</br>
+	
+		 set_value( 1,"test1",fl ,qname);
+		 </br>
+		
+		
+			 y = num_items(qname);
+			 </br>
+			
+	
+	
+		
+		 delete_key(1, qname);
+		</br>
+	
+	
+		
+	
+			
+
+				
+}
+									</code>
+									</br>
+									 Now if you want a headache to look at the libkeys source file( keys.c). Thats where
+									the messy code dealing with establishing a connection to the server as well as sending and receiving messages. It was <b> SO </b> annoying to write. 
+									But now the "clients" can write little programs using an api that executes commands remotely(on the server side) designed from the perspective of the client( with all the complexity hidden).
+									</p>	
 								</div>
 							</section>
 
 						<!-- Three -->
 							<section id="three">
 								<div class="container">
-									<h3>Portfolio</h3>
+									<h3>Generating Executables</h3>
 									<p>Here are a few cool projects i've worked on!</p>
-									<div class="features">
-										<article>
-											<a href="/portfolio_articles/locate_and_defibrillate.html" class="image"><img src="images/pic01.jpg" alt="" /></a>
-											<div class="inner">
-												<h4><a href="/portfolio_articles/locate_and_defibrillate.html">Locate & defibrillate</a></h4>
-												<p> A minimum viable product(MVP) of a native iOS app that will finds the nearest AED to that user, pulling from a backend database on an aws server. </p>
-											</div>
-										</article>
-										<article>
-											<a href="/portfolio_articles/distributed_web_service.html" class="image"><img src="images/pic02.jpg" alt="" /></a>
-											<div class="inner">
-												<h4><a href="/portfolio_articles/distributed_web_service.html">Distributed web service in C</a></h4>
-												<p>A fully concurrent distributed web service written in C, with an accompanying client side api</p>
-											</div>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
-											<div class="inner">
-												<h4>Password cracking programming puzzle</h4>
-												<p> A programming puzzle i created while a was a Teaching Assistant for Data Structures and Algorithms. Learn about hashing salts, rainbow tables, and rudimentary password cracking techniques</p>
-											</div>
-										</article>
-										Click *here* to see all
+									<p>
+									I have found, at least on my virtual machine(linux mint) that the message queues are very finicky. There is a default msg_max size less than the size of my request struct, so it is important to run the following shell command
+“ sudo sh -c 'echo 512 > /proc/sys/fs/mqueue/msg_max' “
+
+I was also able to solve many issues by deleting the leftover empty queues from the disk(as they are stored on the actual linux os). They can be found in the directory “/dev/mqueue” and can be removed with a simple “rm” command.
+
+To build the two executables, all that is necessary is to run the command “make” in the linux terminal. This will compile the server executable, compile the keys.c code, archive it into a static library, and handle all the static library and pthread linking. The demos would then be available by running “./server” on one terminal, and “./client#” on another.
+
+
+
+
+
+
+Test plan:
+There are two demo client1, client2 , which show different functionalities
+
+
+Client1.c
+ will check the the number of items is correctly 0 on start.
+It will add 1 tuple, show that the method on the server side returned that it was a success.
+Then it will check the new total number of elements stored, which will be 1.
+It then adds another tuple. 
+Shows totalnum =2;
+It deletes 1, shows total num = 1;
+Then it will init()
+And show server side has been reset and totalnum is at 0 again.
+
+
+Client2.c-
+Will add 2 tuples. Will get 1 tuple and print it out.
+Will change a tuple and print it out.
+
+</p>
 									</div>
 								</div>
 							</section>
 
-						<!-- Four -->
-							<section id="four">
-								<div class="container">
-									<h3>Contact Me</h3>
-									<p>Integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum integer. Integer eu ante ornare amet commetus.</p>
-									<form method="post" action="https://formspree.io/austinramos@wustl.edu">
-										<div class="row uniform">
-											<div class="6u 12u(xsmall)"><input type="text" name="name" id="name" placeholder="Name" /></div>
-											<div class="6u 12u(xsmall)"><input type="email" name="email" id="email" placeholder="Email" /></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u"><input type="text" name="subject" id="subject" placeholder="Subject" /></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u"><textarea name="message" id="message" placeholder="Message" rows="6"></textarea></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u">
-												<ul class="actions">
-													<li><input type="submit" class="special" value="Send Message" /></li>
-													<li><input type="reset" value="Reset Form" /></li>
-												</ul>
-											</div>
-										</div>
-									</form>
-								</div>
-							</section>
+						
 
 						<!-- Five -->
 						<!--
