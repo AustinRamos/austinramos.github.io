@@ -26,10 +26,10 @@
 				<nav id="nav">
 					<ul>
 						<li><a href="../index.html" class="active">Back</a></li>
-						<li><a href="#two">Whats it all about?</a></li>
-						<li><a href="#three">Architecture</a></li>
-						<li><a href="#four">Feedback</a></li>
-	<!-- Header				<li><a href="#five">Blog</a></li>  -->	
+						<li><a href="#two">What does it do(and how)?</a></li>
+						<li><a href="#three">User Testing & Feedback</a></li>
+					
+	<!-- Header				<li><a href="#four">Blog</a></li>  -->	
 				
 					
 					</ul>
@@ -56,18 +56,22 @@
 										
 									</header>
 									
-									<p> So thishere's a quick summary of what I learned</br></p>
-									<ul >
-										<li > Memory management is really important! (after 5+ hours of debugging just a couple segmentation faults)</li>
-										<li>Dealing with concurrency and race conditions(pthreads, concurrency on both client and server)</li>
-										<li >Makefiles and the billions of hours of time they can save</li>
-										<li >Interprocess Communication (Posix message queues)</li>
-										<li>Static libraries</li>
-									</ul>
-									
+								
+								<p> 
+								This was a really fun final project I worked on for a class titled Software Engineering Workshop.
+								 The goal was to step through the design process for a Minimum Viable Product(MVP), treating it as though 
+								 it were to become a fully fledged consumer product. All around, this was a much less technical process than I am used to.
+								  We proposed an IOS application that would be able to help students find the closest defibrillator to them. This was designed 
+								  for situations where these students found themselves bystanders in cardiac emergencies. 
+</br>
+It was cool to step through the process, I was lucky enough to have Product Managers at local startups to help guide us through the process of setting 
+deadlines and helping us through different design decisions(tradeoffs of using a non native ios development platform like react, Xamarin, or Cordoba, database schemas
+ on the backend, UI design decisions, etc..)
+
+								</p>
 									
 									<p>
-									Check out the full project <a href="https://github.com/AustinRamos/Distributed_Service_C"><b>on my Github!</b></a>
+									Check out the full project <a href="https://github.com/AustinRamos/Locate-Defibrillate"><b>on my Github!</b></a>
 									
 									
 							  </p>
@@ -77,83 +81,60 @@
 						<!-- Two -->
 							<section id="two">
 								<div class="container">
-									<h3>What's it all about?</h3>
+									<h3>What does it do(and how)?</h3>
 									
 								<p>
-									Ever heard of an <a hre"https://en.wikipedia.org/wiki/Remote_procedure_call">RPC</a>? Well this is basically that, but worse. Using Sun RPC would have probably made this project just slightly more than trivial,
-									but if I had jumped straight into RPC's i probably would not understand very much about what goes on in even the simplest concurrent server/client communication. they basically generate code to allow you to (seemingly) execute a procedure from one process on another process <b>with a different memory space </b>.
-								For example, by simply calling a simply function like add_tuple() on the client side,  the RPC would act as a black box,
-									executing that functionality on the server side as if it had been on executed on the client side. It basically hides all the complexity of establishing connections
-									and telling the server what kind of actions the client expects it to perform.
-									Its a clever trick and vastly reduces the complexity of how the client and server interact. Its pretty much the concept i 
-									used to develop the static library I described below.
-									</br>
-									I mean, look how simple a client program seems:
-									<code>
-									</br>
-									int main(void) {
-									</br>
-int y = num_items(qname);
-</br>
-	printf("Number of items: %d \n", y);
-	</br>
-	
-	float fl = 2.3;
-	</br>
-	set_value( 1,"test1",fl ,qname);
-	</br>
-		set_value( 2,"test2",fl ,qname);
+									
+							This specific project was designed for students on our campus to be able to find the location of the nearest defibrillator in the event
+							 of a cardiac emergency using a native iPhone application. 
+There are two components the front end and the back end. The front end is of course, the iPhone application, while the back end is a very simple administrator site, database,
+ and collection of defibrillator locations, all stored on an AWS ec2 instance (Amazon web server).
+</br></br>
+Architecture:
 		</br>
-	
-		 set_value( 1,"test1",fl ,qname);
-		 </br>
-		
-		
-			 y = num_items(qname);
-			 </br>
-			
-	
-	
-		
-		 delete_key(1, qname);
-		</br>
-	
-	
-		
-	
-			
-
-				
-}
-									</code>
-									</br>
-									 Now if you want a headache to look at the libkeys source file( keys.c). Thats where
-									the messy code dealing with establishing a connection to the server as well as sending and receiving messages. It was <b> SO </b> annoying to write. 
-									But now the "clients" can write little programs using an api that executes commands remotely(on the server side) designed from the perspective of the client( with all the complexity hidden).
-									</br>
-									Here is a good diagram describing how these things work:
-									</br>
-									<img src="../images/distributed_web_service/rpc.jpg" alt="Girl in a jacket">
+							<img src="../images/locate/arch.jpg" alt="architecture">
 									</p>	
 									</br>
+									<p>
+									When the student opens the app on their side, it will present a cache of the locations it had received from the
+								 server last time, while it attempts to make a request to the server to get the most up to date locations.
+								</br>
+									<img src="../images/pic01.jpg" width="400" height="400" alt="app">
 									
-									<h2>Static what?</h2>
 									</br>
-								<p>	The "Invoke service" and "Request response" portions of the diagram above represent the role of the static library in this 
-								Distributed Service. it is compiled and linked with the client code(as per the makefile), so that, rather than 
-								the client side programmer does not have to concern him/herself with establishing a connection, and making the 
-								the server side knows what it is doing. I say this because it is not just possible to send a single message 
-								to the server and have it know if it is adding a tuple, removing, modifying, etc. 
-								</br> 
-								The client has to send a message before hand telling the server what to expect,
-								so the server knows what to do with the message containing the real data, and also
-								so that it knows what it is supposed to return to the server. I decided to 
-								do this in a particular way. First I sent a "dummy" message struct, where the key value integer
-								is just an integer from 1-6. these represent the 6 possible operations the server side will allow for the client.
-								For some, such as num_items() and init(), there is now need to send 2 messages. However for others like
-								set_value() and delete_key() it is necessary to first tell the server what it is supposed to do,
-								and the send the corresponding data(for set_value() a full struct to be added, and for delete_key another "dummy" struct where the key value is the
-								struct whose key that is to be deleted.
+									</br> 
+								
+								</br>
+								They are presented with a map showing their location and all the pins representing different location. They can 
+								press any pin directly to get the building name and brief description of its location in the building. When they press 
+								<b>the giant red</b> locate AED button, the application will isolate the shortest path.
+						</br>
+						On the back end, there is a relatively crude and simple administrator site, a database holding the (properly encrypted) credentials of 
+						the authorized administrators and a simple csv text file holding the locations of the defibrillators in a way that is very simple to parse 
+						on the front end side of things(This could have been designed in a more robust manner, but given the circumstances we opted for simplicity.). 
+						Authorized administrators can log on and see the list as well as add, modify, or remove locations. 
+						</br>
+						 Uhh, that’s pretty much it! If we had the goal of
+						 making a real end product, we would have changed or improved certain aspects of our design(I discuss this below in the user testing and feedback section), 
+						 but this was just a fun project where for the first time <b>I got to really think about different design choices and their impact on both the rest of the development process as well as the user experience.</b>
+</br>
+The cool thing is Defibrillators aside, this MVP would work for any number of on campus situations where a it would be helpful for a group of students to know the exact location of a number of different 
+particular objects or buildings, so long as there is a group of trusted administrators to update and maintain the locations. 
+</br>
+<br>
+Of course, given the 'MVP' nature of this project, there are naturally a number of things we could do
+to refine it if it were to be used in actual emergency situations.
+Here are the most significant things we would have changed or improved on if this were to be a proper 'product':
+<ul>
+<li>A much cleaner backend</li>
+<li>More secure way of storing locations</li>
+<li>Better caching mechanism</li>
+<li>More sophistaced shortest path finding(we are using Euclidian distance, perhaps not the best for all campuses but ours is mostly traverable in this manner).</li>
+<li>Giving directions to the actual defibrillator rather than just isolating it from the others.</li>
+<li>A feature to contact authorities/paramedics</li>
+</ul>
+
+
 								</p>
 								</div>
 							</section>
@@ -161,42 +142,29 @@ int y = num_items(qname);
 						<!-- Three -->
 							<section id="three">
 								<div class="container">
-									<h3>Generating Executables</h3>
+									<h3>User Testing and Feedback</h3>
 									
 									<p>
-									I have found, at least on my virtual machine(linux mint) that the message queues are very finicky. There is a default msg_max size less than the size of my request struct, so it is important to run the following shell command
-“ sudo sh -c 'echo 512 > /proc/sys/fs/mqueue/msg_max' “.
+									We had all the students on the Emergency Support Team, as well as Residential advisors and other student advisors test the app, and got great feedback! The PM’s who were guiding us through the project constantly were bringing up the importance of user testing and user feedback, something I have never actively sought in previous projects.
+Below is the information regarding the user testing:
 </br>
-
-I was also able to solve many issues by deleting the leftover empty queues from the disk(as they are stored on the actual linux os). They can be found in the directory “/dev/mqueue” and can be removed with a simple “rm” command.
-
-To build the two executables, all that is necessary is to run the command “make” in the linux terminal. This will compile the server executable, compile the keys.c code, archive it into a static library, and handle all the static library and pthread linking. 
+We had 67 people use the application and give feedback:
+<ul>
+<li> EST members (35), other students (32), RAs/WUSAs/faculty (7/67)</li>
+<li> EST members (including RAs and WUSAs) were ones to actually use the app </li>
+</ul>
 </br>
-The demos would then be available by running “./server” on one terminal, and “./client#” on another.
-
-
-
-
-
-
-
-There are two demo client1, client2 , which show different functionalities
-
-
-Client1.c
- will check the the number of items is correctly 0 on start.
-It will add 1 tuple, show that the method on the server side returned that it was a success.
-Then it will check the new total number of elements stored, which will be 1.
-It then adds another tuple. 
-Shows totalnum =2;
-It deletes 1, shows total num = 1;
-Then it will init()
-And show server side has been reset and totalnum is at 0 again.
-
-
-Client2.c-
-Will add 2 tuples. Will get 1 tuple and print it out.
-Will change a tuple and print it out.
+Survey prompts after they used the application included:
+<ul>
+<li> Would you download the application</li>
+<li> how likely would you be to recommend it to a friend?</li>
+<li> would you be disappointed without its existence on the market?</li>
+<li> any comments of app importance/features (free response)</li>
+</ul>
+</br>
+Here were the results:
+</br>
+<img src="../images/locate/feedback.png" width= "500" height = "300" alt="app">
 
 </p>
 									</div>
