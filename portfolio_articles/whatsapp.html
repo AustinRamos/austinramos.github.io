@@ -6,11 +6,11 @@
 -->
 <html>
 	<head>
-		<title>Austin Ramos</title>
+		<title>WhatsApp Message Notification Service</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/portfolio/Distributed_Service.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 	</head>
 	<body>
@@ -18,25 +18,23 @@
 		<!-- Header -->
 			<section id="header">
 				<header>
-					<span class="image avatar"><img src="images/avatar.jpg" alt="" /></span>
+					<span class="image avatar"><img src="../images/avatar.jpg" alt="" /></span>
 					<h1 id="logo"><a href="#">Austin Ramos</a></h1>
 					<p></br>Turning coffee into code<br />
 					since 2012</p>
 				</header>
 				<nav id="nav">
 					<ul>
-						<li><a href="#one" class="active">About</a></li>
-						<li><a href="#two">Interests</a></li>
-						<li><a href="#three">Portfolio</a></li>
-				<!-- blog out for now 			<li><a href="#five">Blog</a></li>    -->
-			<li><a href="portfolio_articles/Austin_Ramos_Final_Resume.pdf">Resume</a></li>   
-						<li><a href="#four">Contact</a></li>
+						<li><a href="../index.html" class="active">Back</a></li>
+						<li><a href="#two">Whats it all about?</a></li>
+						<li><a href="#three">Generating Executables</a></li>
+	<!-- Header				<li><a href="#five">Blog</a></li>  -->	
+				
 					
 					</ul>
 				</nav>
 				<footer>
 					<ul class="icons">
-					
 						<li><a href="https://github.com/AustinRamos" class="icon fa-github"><span class="label">Github</span></a></li>
 						<li><a href="mailto:austinramos@wustl.edu" class="icon fa-envelope"><span class="label">Email</span></a></li>
 					</ul>
@@ -50,31 +48,27 @@
 					<div id="main">
 
 						<!-- One -->
-							<section id="one">
+							<section id="one" background-image="../images/whatsapp/whatsapp_pic.png">
 								<div class="container">
 									<header class="major">
-										<h2>About</h2>
-										<p>Who Am I?	</p>
+										<h4> Message Notification Service</h4>
+									
 									</header>
 									
-									<p>Well, I’m Austin. I like computers and I study them too. Concentrating on Distributed systems.
-									 Finance and Economics are cool too. Blockchain 
-									 technology is really cool. </br>
-									  Washington University in St. Louis, 2019. B.S in Computer Science, B.A in Economics. Soon to be software engineer! </p>
-								
-								<h3> What is this?</h3>
-							<p>	A way to show off some of the cool things i've worked on, but <b> more importantly</b>, a way to hold myself accountable for learning new things! I like teaching 
-							myself new stuff, but I tend to bounce around 4-5 topics that fascinate me at any given time, without learning about any one in particular in depth. This is just no 
-							  way to learn much about anything. Maybe this is something most people already know, but I have the attention span
-							  of a spoon so this is a big step for me. Hopefully posting projects on here will help me stay focused.
-							  </br> </br>
-							  I’ll break down some projects I’ve done in the past, write about the technical interview process for software engineering these days, write
-							   about topics that are loosely related to my interests below, or pretty much whatever else I want to!
-</br>
-<b>Disclaimer:</b> 1) As this is mostly for me, you may be subject to my sense of humor, which is not very good. 
-
-							  
-							  <p><a href="https://www.linkedin.com/in/austin-ramos-243181111/"><b>Connect with me on linkedIn</b> </a>, and <a href="https://github.com/AustinRamos"><b>Check out my Github</b></a>! </p>
+									<p> Quick summary of what I learned:</br></p>
+									<ul >
+									<li>clients can be servers, servers can be clients, everything is nothing and nothing is everything (client-server paradigms are just like, social constructs, man)</li>
+										<li >Cross language client-server communication with TCP sockets</li>
+										<li >Threading and race conditions</li>
+										<li >Most importantly: Remote Procedure Calls (using Sun RPC)</li>
+						
+									</ul>
+									
+									
+									<p>
+									Check out the full project <a href="https://github.com/AustinRamos/WhatsApp-"><b>on my Github!</b></a>
+									
+									
 							  </p>
 								</div>
 							</section>
@@ -82,88 +76,76 @@
 						<!-- Two -->
 							<section id="two">
 								<div class="container">
-									<h3>Academic and Career Interests</h3>
-									<h4>     (Stuff I like)</h4>
+									<h3>What's it all about?</h3>
+									
+								<p>
+								So this is basically just a simplified message notification service! clients can register users, connect and send messages to other (registered) users. if a 
+								user is sent a message and is not currently connected, the "pending" messages are stored on the server side and sent to the user when he/she connects.
+								Thats um, pretty much it! but its harder than it seems i promise.
+								</br>
 								
-									<ul class="feature-icons">
-										<li class="fa-code">Distributed Systems</li>
-										<li class="fa-cubes">Smart contract development and token protocol design </li>
-										<li class="fa-book">Database design and management</li>
-										<li class="fa-coffee">Consuming an excessive amount of caffeine</li>
-										<li class="fa-bolt">Algorithmic trading and Automated Trading Systems</li>
-										<li class="fa-users">Artificial intelligence</li>
-										<li class="fa-book">Market design and behaviour</li>
+					
+									there are 3 main components to this project each worth discussing on its own:
+									<ul>
+									<li>The java client (the user) </li>
+									<li> The RPC client</li>
+								    <li> The RPC server</li>
+									 </ul>
+									 </br>
+									Here is a sort of diagram of the whole thing:
+									<img src="../images/whatsapp/diagram.png" >
+									</p>	
+									</br>
+									
+									<h2>Java Client</h2>
+									the client uses gnu/getopt to allow users to type commands in a command prompt style interface. users can make the following requests:
+									<ul>
+									<li>REGISTER -user- : this puts the username into the circular queue, and effectively adds the user into the system.</li> 
+									<li> UNREGISTER -user- : this removes the user from the system.</li> 
+									<li>CONNECT -user- : Connect is what makes the user "online" and enables him/her to receive messages.</li>
+									<li>DISCONNECT -user- </li>
+									<li> SEND -user- -message- : sends another user a text message with a max size of 256 chars. if the receiving user is not connected, it stores the messages as "pending messages" in the queue on the server side, to be delivered when the user connects.</li>
 									</ul>
-										
+									</br>
+									
+									<h2> RPC client </h2>
+									The RPC client is a server to the java client. it receives one of the requests described above(register, connect, send, etc...) and will make the appropriate RPC call to either retrieve information from the server side or modify the queue to add or delete users.
+									Java clients connect to this via a TCP socket connection. They will send the messages described above to the middleman server, which uses RPC calls to call the main RPC message store server where pending messages and the list of users are stored.
+									I won't go into too much detail regarding the XDR interface files that define the RPC calls, but there are a few RPC calls and a few structs that can be passed between the RPC client and server that essentially allow the RPC client to define exactly what information it wants or what it wants to change(add user, delete user, etc.) from the RPC server. the RPC server will always return a response integer indicating success or a particular type of failure depending on the operation.
+									<h2> RPC server</h2>
+							the RPC server maintains the queue, which contains all the pending message information as well as the list of users and their status(connected/disconnected). Each time this information is needed by either the RPC client or the java client, an RPC call has to be made here.
+							Well you'll notice when you run the RPC message store server, you don’t pass it anything, no IP, no port number, no anything! this is because Sun RPC handles the dirty work! 
+The two key concepts behind this black magic are portmapper and rpcbind.
+upon starting up, the server will find an IP and port number to register its services with, and tell portmapper what its address is(as it can change each time it is run).
+
 								</div>
 							</section>
 
 						<!-- Three -->
 							<section id="three">
 								<div class="container">
-									<h3>Portfolio</h3>
-									<p>Here are a few cool projects i've worked on!</p>
-									<div class="features">
-									<article>
-											<a href="/portfolio_articles/whatsapp.html" class="image"><img src="images/whatsapp/whatsapp_pic.png" alt="" /></a>
-											<div class="inner">
-												<h4><a href="/portfolio_articles/whatsapp.html">"Whats App" Messaging service</a></h4>
-												<p> A simplified messaging notification service. Clients in java, and backend servers written in C. First time using RPC's! </p>
-											</div>
-										</article>
-										<article>
-											<a href="/portfolio_articles/locate_and_defibrillate.html" class="image"><img src="images/pic01.jpg" alt="" /></a>
-											<div class="inner">
-												<h4><a href="/portfolio_articles/locate_and_defibrillate.html">Locate & defibrillate</a></h4>
-												<p> A minimum viable product(MVP) of a native iOS app that will finds the nearest AED to that user, pulling from a backend database on an AWS server. </p>
-											</div>
-										</article>
-										<article>
-											<a href="/portfolio_articles/distributed_web_service.html" class="image"><img src="images/distributed_web_service/pic02.jpg" alt="" /></a>
-											<div class="inner">
-												<h4><a href="/portfolio_articles/distributed_web_service.html">Distributed web service in C</a></h4>
-												<p>A fully concurrent distributed web service written in C, with an accompanying client side api.</p>
-											</div>
-										</article>
-										<article>
-											<a href="https://github.com/AustinRamos/Java_password_cracking_ext" class="image"><img src="images/pic03.jpg" alt="" /></a>
-											<div class="inner">
-												<h4><a href="https://github.com/AustinRamos/Java_password_cracking_ext">Password cracking programming puzzle</a></h4>
-												<p> A programming puzzle i created while a was a Teaching Assistant for Data Structures and Algorithms. Learn about hashing salts, rainbow tables, and rudimentary password cracking techniques</p>
-											</div>
-										</article>
-										Click *here* to see all
+									<h3>Generating Executables</h3>
+									
+									<p>
+									the rpcgen component of Sun RPC creates quite a neat and tidy make file for us. I modified the make file slightly to include the linking
+									for the circular queue used on the RPC server, and also to compile the java file.
+									To run the whole program, you will need four terminals open(1 for the RPC server, 1 for the RPC client, and 2 for 2 java clients to send messages to eachother).
+									the executables should be run in this order(and manner):
+									1) ./message_store_server
+									2) ./message_store_client localhost 8080
+									3) java -cp . client -s localhost -p 8080
+									4) java -cp . client -s localhost -p 8080
+									
+									after that you should be ready to register users and start communicating!
+									</br>
+Here is an example of two clients communicating with each other:
+<img src="../images/whatsapp/whatsapp_pic_small.png" >
+</p>
 									</div>
 								</div>
 							</section>
 
-						<!-- Four -->
-							<section id="four">
-								<div class="container">
-									<h3>Contact Me</h3>
-									<p>If you wanna get in touch with me leave a message down here.</p>
-									<form method="post" action="https://formspree.io/austinramos@wustl.edu">
-										<div class="row uniform">
-											<div class="6u 12u(xsmall)"><input type="text" name="name" id="name" placeholder="Name" /></div>
-											<div class="6u 12u(xsmall)"><input type="email" name="email" id="email" placeholder="Email" /></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u"><input type="text" name="subject" id="subject" placeholder="Subject" /></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u"><textarea name="message" id="message" placeholder="Message" rows="6"></textarea></div>
-										</div>
-										<div class="row uniform">
-											<div class="12u">
-												<ul class="actions">
-													<li><input type="submit" class="special" value="Send Message" /></li>
-													<li><input type="reset" value="Reset Form" /></li>
-												</ul>
-											</div>
-										</div>
-									</form>
-								</div>
-							</section>
+						
 
 						<!-- Five -->
 						<!--
